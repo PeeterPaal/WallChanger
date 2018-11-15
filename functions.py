@@ -11,11 +11,13 @@ def WeatherData(city):
 
 def SetWallpaper(img):
     location = os.getcwd()
-    path = os.path.normpath(location + "/" + str(img))
+    path = os.path.normpath(location + "/" + str(img) + ".jpg")
     #The number 20 indicates the action of changing the wallpaper
     SPI_SET_WALLPAPER = 20
     ctypes.windll.user32.SystemParametersInfoW(SPI_SET_WALLPAPER, 0, path, 0)
 
-data = WeatherData("Tartu")
+city = str(input("Input city name: "))
+data = WeatherData(city)
 index = str(data["weather"][0]["id"])
+#print (index)
 SetWallpaper(index)
