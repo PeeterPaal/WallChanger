@@ -6,6 +6,15 @@ from tkinter import *
 from tkinter import ttk
 from PIL import Image, ImageTk
 
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = path.abspath(".")
+
+    return path.join(base_path, relative_path)
 
 def WeatherData(city):
     #The API call is different for different accounts
@@ -41,7 +50,7 @@ def SetWallpaper():
 #city = input("City: ")
 
 def change(event=None):
-    tekst.configure(text="Palun oota natukene")
+    tekst.configure(text="Palun oodake")
     tekst.update()
     city = nimi.get()
     data = WeatherData(city)
@@ -51,11 +60,11 @@ def change(event=None):
     if data["cod"] == "404":
         tekst.configure(text="väär linna nimi") 
     if data["cod"] == 200:
-        tekst.configure(text="Vahetatud")
         key = data["weather"][0]["id"]
         resolution = GetResolution()
         GetImg(key, resolution)
         SetWallpaper()
+        tekst.configure(text="Vahetatud")
 
 raam = Tk()
 raam.title("WallChanger")
@@ -75,8 +84,8 @@ raam.rowconfigure(0, weight = 1)
 raam.rowconfigure(1, weight = 1)
 raam.rowconfigure(2, weight = 1)
 
-rb = ImageTk.PhotoImage(Image.open("./rainbow_45.png"))
-sun = ImageTk.PhotoImage(Image.open("./sun_45.png"))
+rb = ImageTk.PhotoImage(Image.open(resource_path("rainbow_45.png")))
+sun = ImageTk.PhotoImage(Image.open(resource_path("sun_45.png")))
 Label(raam, image = rb).place(x = 10, y = 30, width = 50)
 Label(raam, image = sun).place(x = 240, y = 30)
 
